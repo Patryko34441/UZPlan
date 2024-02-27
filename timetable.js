@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var nextWeek = document.getElementById('nextWeek');
     var resetWeek = document.getElementById("resetDate")
     var showTimetable = document.getElementById("showTimetable");
+
     prevWeek.addEventListener('click', function (){
         weekOffset--;
         var currentweek = returnDatesInWeek(weekOffset)
@@ -45,8 +46,9 @@ document.addEventListener("DOMContentLoaded", function() {
         if (event.target.type === 'checkbox') {
             checkboxes = getCheckedCheckboxes();
             sortBytime(fiterByCheckboxes(zajecia,checkboxes));
-            console.log(sortBytime(fiterByCheckboxes(zajecia,checkboxes)) );
-            renderTimetable(zajecia);
+            //console.log(sortBytime(fiterByCheckboxes(zajecia,checkboxes)) );
+            cleanTimeTable();
+            renderTimetable(sortBytime(fiterByCheckboxes(zajecia,checkboxes)) );
         }
     });
 
@@ -56,85 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
 
-
     var zajecia = makeListOfWeek(weekOffset,receviedContent)
-
-
-
-
-    //console.log(groupCheckboxes(receviedContent));
-    //renderTimetable(zajecia);
-    //console.log(receviedContent)
-    //console.log(zajecia)
-
-
-/*
-    var table = document.getElementById("timetableContent");
-    //var tableBody = table.getElementsByTagName("tbody");
-
-
-        for (var i = 1; i < zajecia.length; i++) {
-            var trElement = document.createElement("tr");
-            var thElement = document.createElement("th");
-
-            var divElement = document.createElement("div");
-            divElement.className = "classesBox";
-
-            var timeElement = document.createElement("p");
-            timeElement.className = "classesTime";
-
-            var dateElement = document.createElement("p");
-            dateElement.className = "classesDate";
-
-            var nameElement = document.createElement("p");
-            nameElement.className = "classesName";
-
-            var typeElement = document.createElement("p");
-            typeElement.className = "classesType";
-
-
-            var daySets = zajecia[i]
-
-            for (var j = 0; j < daySets.length;j++){
-                console.log(i,j);
-                console.log(daySets.length);
-
-                if ( j === 0 ){
-                    dateElement.textContent = zajecia[i][j]
-                }
-                if( j === 3){
-                    timeElement.textContent = zajecia[i][j];
-                }
-                if(j === 4){
-                    timeElement.innerText += " - " + zajecia[i][j];
-                }
-                if( j === 5){
-                    nameElement.textContent = zajecia[i][j];
-                }
-                if( j === 6){
-                    typeElement.innerText = zajecia[i][j]
-                }
-
-            }
-            divElement.appendChild(timeElement);
-            divElement.appendChild(dateElement);
-            divElement.appendChild(nameElement);
-            divElement.appendChild(typeElement);
-            thElement.appendChild(divElement);
-            trElement.appendChild(thElement);
-            table.appendChild(trElement);
-
-        }
-
-
-*/
-
-
-
-
-
-
-
 
 
 })
@@ -301,13 +225,17 @@ function renderTimetable(content) {
 
 
     var timeSet = new Set();
+    var timeSet2 = new Set();
 
     for (const entry of content) {
         const timeValue = entry[3];
+        const timeValue2 =entry[4];
         timeSet.add(timeValue);
+        timeSet2.add(timeValue2);
     }
 
     timeSet = Array.from(timeSet);
+    timeSet2 = Array.from(timeSet2);
 
     // Pętla idąca po godzinach
     for (var i = 0; i < timeSet.length; i++) {
@@ -323,11 +251,32 @@ function renderTimetable(content) {
 
             if (j === 0) {
                 // Wpisywanie w pierwszą kolumnę po lewej wartości godziny pierwszych zajęć
-                cell.innerText = timeSet[i];
+                cell.innerText = `${timeSet[i]} - ${timeSet2[i]}`;
             } else {
                 // Dla reszty, wprowadzamy walidację
                 if (matchingEntry) {
-                    cell.innerText = matchingEntry[5];
+
+                    var divElement = document.createElement("div");
+                    divElement.className = "classesBox";
+
+                    var dateElement = document.createElement("p");
+                    dateElement.className = "classesDate";
+                    dateElement.innerText = matchingEntry[0]
+
+                    var nameElement = document.createElement("p");
+                    nameElement.className = "classesName";
+                    nameElement.innerText = matchingEntry[5];
+
+                    var typeElement = document.createElement("p");
+                    typeElement.className = "classesType";
+                    typeElement.innerText = matchingEntry[6];
+
+
+                    divElement.appendChild(dateElement);
+                    divElement.appendChild(nameElement);
+                    divElement.appendChild(typeElement);
+
+                    cell.appendChild(divElement);
                     // Usuwamy pasujący element, aby nie był brany pod uwagę w kolejnych iteracjach
                     content = content.filter(entry => entry !== matchingEntry);
                 } else {
@@ -337,65 +286,4 @@ function renderTimetable(content) {
         }
     }
 
-    /*
-    //todo
-    // na poczatku usuń całą tablicę
-    const daysMapping = { 'Pn': 1, 'Wt': 2, 'Śr': 3, 'Cz': 4, 'Pt': 5, 'Sb': 6, 'Nd': 7 };
-    const timetableTable = document.getElementById('timetableContent');
-
-    var timeSet = new Set();
-
-    for ( const entry of content){
-        const timeValue = entry[3];
-        timeSet.add(timeValue);
-    }
-
-    timeSet = Array.from(timeSet);
-
-    //pętla idąca po godzinach
-    for( var i= 0; i < timeSet.length; i++) {
-
-        var row = timetableTable.insertRow(i+1)
-        //petla idąca po dniach
-        for (var j = 0; j < 7; j++) {
-            //wpisywanie w pierwszą kolumnę po lewej wartości godziny pierwszych zajęć
-            if (j == 0) {
-                var cell = row.insertCell(j);
-                cell.innerText = timeSet[i];
-            }
-            //dla reszty, musimy przeprowadzić walidację, tego czy należy wrzucić boxa, czy zostawić puste
-            else{
-                for( var k = 0; k < content.length; k++){
-                          //jeżeli nie zgadza się godzina rozpoczęcia, lub nie zgadza się dzień słownie to
-                        if(content[k][3] === timeSet[i] || daysMapping[content[k][1]] === j ){
-                            var cell = row.insertCell(j);
-                            cell.innerText = `pusty index ${j}`
-                    }
-                        else{
-                            var cell = row.insertCell(j);
-                            cell.innerText = content[k][5];
-
-                        }
-
-                }
-
-
-
-
-            }
-
-        }
-    }
-
-/*
-    var row = timetableTable.insertRow(1);
-    for ( var i = 0; i < 8; i++){
-        var test = document.createElement("a")
-        var cell = row.insertCell(i);
-        test.innerText = `index ${i}`
-        cell.appendChild(test)
-
-    }
-
- */
 }

@@ -1,6 +1,15 @@
 
 //test dla funkcji isInDate
 
+document.addEventListener('change', function(event) {
+    if (event.target.type === 'checkbox') {
+        checkboxes = getCheckedCheckboxes();
+        sortBytime(fiterByCheckboxes(zajecia,checkboxes));
+        console.log(sortBytime(fiterByCheckboxes(zajecia,checkboxes)) );
+        renderTimetable(sortBytime(fiterByCheckboxes(zajecia,checkboxes)) );
+    }
+});
+
 for( var i = 1; i < 14; i++) {
     console.log(i);
     console.log(isInDate(content[i][0], currwek[0], currwek[6]), "Tutaj wynik");
