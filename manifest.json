@@ -1,0 +1,26 @@
+{
+  "name": "UZP",
+  "version": "1.0.0",
+  "description": "Rozszerzenie poprawiajace widoczność planu zajęć UZ.",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [ "http://www.plan.uz.zgora.pl/grupy_plan.php?ID=*" ],
+      "js": ["contentscript.js"]
+    }
+  ],
+  "icons": {
+    "128": "icon.png"
+  },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["timetable.js"],
+    "persistent": false
+  },
+  "manifest_version": 2
+}
