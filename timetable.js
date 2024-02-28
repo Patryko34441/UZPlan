@@ -17,13 +17,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const receviedContent = JSON.parse(localStorage.getItem("timetable"));
     var zajecia = makeListOfWeek(weekOffset,receviedContent)
-    basicWeek();
     groupCheckboxes(receviedContent);
-    var checkboxes = [];
+
+    //zaznaczZLocalStorage();
+    basicWeek(zajecia);
+    var checkboxes = getCheckboxesFromLocalStorage();
     var weekOffset = 0;
     var prevWeek = document.getElementById('previousWeek');
     var nextWeek = document.getElementById('nextWeek');
     var resetWeek = document.getElementById("resetDate")
+
 
 
     prevWeek.addEventListener('click', function (){
@@ -31,11 +34,14 @@ document.addEventListener("DOMContentLoaded", function() {
         var currentweek = returnDatesInWeek(weekOffset)
         document.querySelector('#presentDate').innerText = "od "+ currentweek[0]+ " do " + currentweek[6];
         var zajecia = makeListOfWeek(weekOffset,receviedContent)
+        console.log(zajecia);
+
         zajecia = filterByCheckboxes(zajecia,checkboxes)
         zajecia = sortBytime(zajecia);
         renderTimetable(zajecia);
     })
     nextWeek.addEventListener('click', function () {
+        console
         weekOffset++;
         var currentweek = returnDatesInWeek(weekOffset)
         document.querySelector('#presentDate').innerText = "od "+ currentweek[0]+ " do " + currentweek[6];
@@ -72,13 +78,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
+
+
 })
 
 
 
 
 //Funkcja do powrotu do aktualnego tygodnia
-function basicWeek(){
+function basicWeek(zajecia){
+    zaznaczZLocalStorage()
+    cleanTimeTable()
+    zajecia = filterByCheckboxes(zajecia,getCheckboxesFromLocalStorage());
+    zajecia = sortBytime(zajecia);
+    renderTimetable(zajecia);
     var currentweek = returnDatesInWeek(0)
     document.querySelector('#presentDate').innerText = "od "+ currentweek[0]+ " do " + currentweek[6];
 }
@@ -219,8 +232,7 @@ function getCheckedCheckboxes() {
 }
 
 
-//funkcja odpowiada za wygenerowanie planu zajęć
-
+//Czyszczenie tablicy
 function cleanTimeTable(){
     const timetableTable = document.getElementById('timetableContent');
     while (timetableTable.rows.length > 1) {
@@ -228,7 +240,7 @@ function cleanTimeTable(){
     }
 }
 
-
+//funkcja odpowiada za wygenerowanie planu zajęć
 function renderTimetable(content,timeSets) {
     //console.log(content);
     const daysMapping = { 'Po': 1, 'Wt': 2, 'Śr': 3, 'Cz': 4, 'Pi': 5, 'So': 6, 'Ni': 7 };
@@ -302,3 +314,23 @@ function renderTimetable(content,timeSets) {
 
 }
 
+function getCheckboxesFromLocalStorage(){
+    return JSON.parse(localStorage.getItem("checkboxes")) || [];
+}
+
+
+function zaznaczZLocalStorage() {
+    // Pobierz listę zapamiętanych checkboxów z localStorage
+    var localstorageCheckboxes = JSON.parse(localStorage.getItem("checkboxes")) || [];
+    //console.log(localstorageCheckboxes);
+
+
+    for( entry of localstorageCheckboxes ){
+        var checkbox = document.getElementById(`checkbox-${entry}`);
+        if(checkbox){
+            checkbox.checked = true;
+
+        }
+
+    }
+}
