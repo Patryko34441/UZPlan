@@ -16,23 +16,23 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 document.addEventListener("DOMContentLoaded", function() {
 
     const receviedContent = JSON.parse(localStorage.getItem("timetable"));
-
-
+    var zajecia = makeListOfWeek(weekOffset,receviedContent)
     basicWeek();
     groupCheckboxes(receviedContent);
-
     var checkboxes = [];
     var weekOffset = 0;
     var prevWeek = document.getElementById('previousWeek');
     var nextWeek = document.getElementById('nextWeek');
     var resetWeek = document.getElementById("resetDate")
-    var showTimetable = document.getElementById("showTimetable");
+
 
     prevWeek.addEventListener('click', function (){
         weekOffset--;
         var currentweek = returnDatesInWeek(weekOffset)
         document.querySelector('#presentDate').innerText = "od "+ currentweek[0]+ " do " + currentweek[6];
         var zajecia = makeListOfWeek(weekOffset,receviedContent)
+        zajecia = filterByCheckboxes(zajecia,checkboxes)
+        zajecia = sortBytime(zajecia);
         renderTimetable(zajecia);
     })
     nextWeek.addEventListener('click', function () {
@@ -40,25 +40,36 @@ document.addEventListener("DOMContentLoaded", function() {
         var currentweek = returnDatesInWeek(weekOffset)
         document.querySelector('#presentDate').innerText = "od "+ currentweek[0]+ " do " + currentweek[6];
         var zajecia = makeListOfWeek(weekOffset,receviedContent)
+        zajecia = filterByCheckboxes(zajecia,checkboxes)
+        zajecia = sortBytime(zajecia);
+        renderTimetable(zajecia);
     })
 
     document.addEventListener('change', function(event) {
         if (event.target.type === 'checkbox') {
             checkboxes = getCheckedCheckboxes();
-            sortBytime(fiterByCheckboxes(zajecia,checkboxes));
-            //console.log(sortBytime(fiterByCheckboxes(zajecia,checkboxes)) );
-            cleanTimeTable();
-            renderTimetable(sortBytime(fiterByCheckboxes(zajecia,checkboxes)) );
+            localStorage.setItem("checkboxes", JSON.stringify(checkboxes));
+            zajecia = makeListOfWeek(0,receviedContent)
+            zajecia = filterByCheckboxes(zajecia,checkboxes);
+            zajecia = sortBytime(zajecia);
+            renderTimetable(zajecia);
+
         }
     });
 
     resetWeek.addEventListener('click', function (){
-        basicWeek()
+        weekOffset=0;
+        cleanTimeTable();
+        var currentweek = returnDatesInWeek(0)
+        document.querySelector('#presentDate').innerText = "od "+ currentweek[0]+ " do " + currentweek[6];
         var zajecia = makeListOfWeek(0,receviedContent)
+        zajecia = filterByCheckboxes(zajecia,checkboxes)
+        zajecia = sortBytime(zajecia);
+        renderTimetable(zajecia);
     })
 
 
-    var zajecia = makeListOfWeek(weekOffset,receviedContent)
+
 
 
 })
@@ -167,7 +178,7 @@ function makeListOfWeek (offset,receviedContent){
 
 
 //Funkcja która odfiltrowuje tylko te zajęcia dla wybranych przez użytkownika grup
-function fiterByCheckboxes(content,checkboxesArray) {
+function filterByCheckboxes(content,checkboxesArray) {
     return content.filter(array => checkboxesArray.includes(array[2]))
 }
 
@@ -217,11 +228,13 @@ function cleanTimeTable(){
     }
 }
 
-function renderTimetable(content) {
-    const daysMapping = { 'Pn': 1, 'Wt': 2, 'Śr': 3, 'Cz': 4, 'Pi': 5, 'So': 6, 'Ni': 7 };
+
+function renderTimetable(content,timeSets) {
+    //console.log(content);
+    const daysMapping = { 'Po': 1, 'Wt': 2, 'Śr': 3, 'Cz': 4, 'Pi': 5, 'So': 6, 'Ni': 7 };
     const timetableTable = document.getElementById('timetableContent');
 
-
+    cleanTimeTable();
 
 
     var timeSet = new Set();
@@ -229,7 +242,7 @@ function renderTimetable(content) {
 
     for (const entry of content) {
         const timeValue = entry[3];
-        const timeValue2 =entry[4];
+        const timeValue2 = entry[4];
         timeSet.add(timeValue);
         timeSet2.add(timeValue2);
     }
@@ -269,7 +282,8 @@ function renderTimetable(content) {
 
                     var typeElement = document.createElement("p");
                     typeElement.className = "classesType";
-                    typeElement.innerText = matchingEntry[6];
+                    typeElement.innerText = `${matchingEntry[6]}, ${matchingEntry[2]}`;
+
 
 
                     divElement.appendChild(dateElement);
@@ -287,3 +301,4 @@ function renderTimetable(content) {
     }
 
 }
+
