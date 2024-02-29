@@ -1,30 +1,37 @@
 
+//przekazanie DOM-a z strony do popupu
 var receviedContent = []
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {action: 'collectData'}, function(response) {
-        if(!response){
-            console.log("response was not detected")
+var document;
 
-            receviedContent = JSON.parse(localStorage.getItem("timetable"));
-            runExtension(receviedContent)
-        }
-        else{
-            localStorage.setItem("timetable", JSON.stringify(response));
-            runExtension(response);
+chrome.runtime.onConnect.addListener((port) => {
+    console.assert(port.name === "popup-content-connection");
 
-
+    port.onMessage.addListener((request) => {
+        if (request.action === 'sendArrayToPopup') {
+            const receivedContent = request.data;
+            console.log(receivedContent, "rec");
+            localStorage.setItem("timetable", JSON.stringify(receivedContent));
         }
     });
 });
+/*
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.action === 'sendArrayToPopup') {
+        receviedContent = request.data;
+        console.log(receviedContent, "rec");
+        localStorage.setItem("timetable", JSON.stringify(receviedContent));
+    }
+});
 
+*/
 
-function runExtension(receviedContent){
-    
-    receviedContent = JSON.parse(localStorage.getItem("timetable"));
-    console.log(receviedContent,'recevied')
+document.addEventListener("DOMContentLoaded", function() {
+
+    const receviedContent = JSON.parse(localStorage.getItem("timetable"));
     var zajecia = makeListOfWeek(weekOffset,receviedContent)
     groupCheckboxes(receviedContent);
 
+    console.log(receviedContent);
     //zaznaczZLocalStorage();
     basicWeek(zajecia);
     var checkboxes = getCheckboxesFromLocalStorage();
@@ -40,7 +47,7 @@ function runExtension(receviedContent){
         var currentweek = returnDatesInWeek(weekOffset)
         document.querySelector('#presentDate').innerText = "od "+ currentweek[0]+ " do " + currentweek[6];
         var zajecia = makeListOfWeek(weekOffset,receviedContent)
-        //console.log(zajecia);
+        console.log(zajecia);
 
         zajecia = filterByCheckboxes(zajecia,checkboxes)
         zajecia = sortBytime(zajecia);
@@ -79,9 +86,17 @@ function runExtension(receviedContent){
         zajecia = sortBytime(zajecia);
         renderTimetable(zajecia);
     })
-    
 
-}
+
+
+
+
+
+
+})
+
+
+
 
 //Funkcja do powrotu do aktualnego tygodnia
 function basicWeek(zajecia){
