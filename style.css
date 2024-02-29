@@ -1,3 +1,39 @@
+
+button{
+    border-radius: 5px;
+
+}
+table{
+    border-spacing: 2px;
+
+}
+.hoursCell{
+    font-size: 15px;
+    text-align: center;
+    vertical-align: center;
+    border: 1px black solid;
+    background-color: #f3f8ec;
+
+}
+#presentDate{
+    font-weight: bold;
+    font-size: 17px;
+
+}
+.dateRoomBox{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.classesDate{
+    font-size: 12px;
+}
+.classesRoom{
+    font-size: 13px;
+    font-weight: bold;
+}
+
 #groupSelector{
     display: flex;
     flex-wrap: wrap;
@@ -16,20 +52,24 @@
 
 }
 .classesBox{
-    outline: 5px solid black;
+    background-color: #bcd19f;
+    display: inline-block;
+    text-align: center;
+    border: 1px black solid;
+    padding: 3px;
+    justify-content: center;
+    border-radius: 5px;
 
 }
-.classesTime{
-    font-size: 10px;
-}
 
-.classesDate{
-    font-size: 10px;
-}
+.classesHours{
+    font-size: 13px;
 
+}
 .classesName{
     font-size: 15px;
     word-wrap: normal;
+    font-weight: bold;
 }
 .classesType{
     font-size: 15px;
@@ -37,22 +77,20 @@
 
 
 th{
-
     justify-self: center;
-    width: 80px;
-    height: 100px;
+    border: 1px black solid;
 
 }
-body { height: 100vh; width: 98vw;}
+td{
+    width: 200px;
+    padding: 5px;
 
-.schedule {
-    display: flex;
+}
+body {
+    height: 80vh;
+    width: 98vw;
+    background-color: #f3f8ec;
 }
 
 
-.column {
-    flex: 1;
-    border: 1px solid #ccc;
-    margin: 5px;
-    padding: 10px;
-}
+

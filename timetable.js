@@ -5,8 +5,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === 'sendArrayToPopup') {
         receviedContent = request.data;
 
-        // Tutaj możesz wykorzystać odebrane tablicę
-      // console.log('Odebrano tablicę z content scripta:', content);
        localStorage.setItem("timetable", JSON.stringify(receviedContent));
     }
 });
@@ -165,6 +163,7 @@ function groupCheckboxes (data){
         label.htmlFor = `checkbox-${displayValue}`;
         label.appendChild(document.createTextNode(displayValue));
 
+
         checkboxesContainer.appendChild(checkbox);
         checkboxesContainer.appendChild(label);
         checkboxesContainer.appendChild(document.createElement('br'));
@@ -267,7 +266,7 @@ function renderTimetable(content,timeSets) {
         var row = timetableTable.insertRow(i + 1);
 
         // Pętla idąca po dniach
-        for (var j = 0; j < 7; j++) {
+        for (var j = 0; j < 8; j++) {
             var matchingEntry = content.find(entry =>
                 entry[3] === timeSet[i] && daysMapping[entry[1]] === j
             );
@@ -276,7 +275,8 @@ function renderTimetable(content,timeSets) {
 
             if (j === 0) {
                 // Wpisywanie w pierwszą kolumnę po lewej wartości godziny pierwszych zajęć
-                cell.innerText = `${timeSet[i]} - ${timeSet2[i]}`;
+                cell.className = 'hoursCell';
+                cell.innerText = `${timeSet[i]} \n-\n ${timeSet2[i]}`;
             } else {
                 // Dla reszty, wprowadzamy walidację
                 if (matchingEntry) {
@@ -284,22 +284,42 @@ function renderTimetable(content,timeSets) {
                     var divElement = document.createElement("div");
                     divElement.className = "classesBox";
 
+                    var divTopElement = document.createElement("div");
+                    divTopElement.className = "dateRoomBox";
+
+                    var hoursElement = document.createElement("p");
+                    hoursElement.className = "classesHours";
+                    hoursElement.innerText = `${timeSet[i]} - ${timeSet2[i]}`;
+
                     var dateElement = document.createElement("p");
                     dateElement.className = "classesDate";
                     dateElement.innerText = matchingEntry[0]
+
+                    var roomElement = document.createElement("p");
+                    roomElement.className = "classesRoom";
+                    roomElement.innerText = matchingEntry[8];
 
                     var nameElement = document.createElement("p");
                     nameElement.className = "classesName";
                     nameElement.innerText = matchingEntry[5];
 
+                    var teacherElement = document.createElement("p");
+                    teacherElement.className = "teacherName";
+                    teacherElement.innerText = matchingEntry[7];
+
                     var typeElement = document.createElement("p");
                     typeElement.className = "classesType";
-                    typeElement.innerText = `${matchingEntry[6]}, ${matchingEntry[2]}`;
+                    typeElement.innerText = `${matchingEntry[6]}, Gr. ${matchingEntry[2]} `;
 
 
 
-                    divElement.appendChild(dateElement);
+                    divTopElement.appendChild(dateElement);
+                    divTopElement.appendChild(roomElement);
+                    divElement.appendChild(divTopElement);
+
+                    divElement.appendChild(hoursElement);
                     divElement.appendChild(nameElement);
+                    //divElement.appendChild(teacherElement);
                     divElement.appendChild(typeElement);
 
                     cell.appendChild(divElement);
