@@ -242,7 +242,7 @@ function cleanTimeTable(){
 //funkcja odpowiada za wygenerowanie planu zajęć
 function renderTimetable(content,timeSets) {
     //console.log(content);
-    const daysMapping = { 'Po': 1, 'Wt': 2, 'Śr': 3, 'Cz': 4, 'Pi': 5, 'So': 6, 'Ni': 7 };
+    const daysMapping = {'Po': 1, 'Wt': 2, 'Śr': 3, 'Cz': 4, 'Pi': 5, 'So': 6, 'Ni': 7};
     const timetableTable = document.getElementById('timetableContent');
 
     cleanTimeTable();
@@ -261,13 +261,13 @@ function renderTimetable(content,timeSets) {
     timeSet = Array.from(timeSet);
     timeSet2 = Array.from(timeSet2);
 
-    // Pętla idąca po godzinach
+// Pętla idąca po godzinach
     for (var i = 0; i < timeSet.length; i++) {
         var row = timetableTable.insertRow(i + 1);
 
         // Pętla idąca po dniach
         for (var j = 0; j < 8; j++) {
-            var matchingEntry = content.find(entry =>
+            var matchingEntries = content.filter(entry =>
                 entry[3] === timeSet[i] && daysMapping[entry[1]] === j
             );
 
@@ -279,59 +279,54 @@ function renderTimetable(content,timeSets) {
                 cell.innerText = `${timeSet[i]} \n-\n ${timeSet2[i]}`;
             } else {
                 // Dla reszty, wprowadzamy walidację
-                if (matchingEntry) {
+                if (matchingEntries.length > 0) {
+                    for (const matchingEntry of matchingEntries) {
+                        var divElement = document.createElement("div");
+                        divElement.className = "classesBox";
 
-                    var divElement = document.createElement("div");
-                    divElement.className = "classesBox";
+                        var divTopElement = document.createElement("div");
+                        divTopElement.className = "dateRoomBox";
 
-                    var divTopElement = document.createElement("div");
-                    divTopElement.className = "dateRoomBox";
+                        var hoursElement = document.createElement("p");
+                        hoursElement.className = "classesHours";
+                        hoursElement.innerText = `${timeSet[i]} - ${timeSet2[i]}`;
 
-                    var hoursElement = document.createElement("p");
-                    hoursElement.className = "classesHours";
-                    hoursElement.innerText = `${timeSet[i]} - ${timeSet2[i]}`;
+                        var dateElement = document.createElement("p");
+                        dateElement.className = "classesDate";
+                        dateElement.innerText = matchingEntry[0]
 
-                    var dateElement = document.createElement("p");
-                    dateElement.className = "classesDate";
-                    dateElement.innerText = matchingEntry[0]
+                        var roomElement = document.createElement("p");
+                        roomElement.className = "classesRoom";
+                        roomElement.innerText = matchingEntry[8];
 
-                    var roomElement = document.createElement("p");
-                    roomElement.className = "classesRoom";
-                    roomElement.innerText = matchingEntry[8];
+                        var nameElement = document.createElement("p");
+                        nameElement.className = "classesName";
+                        nameElement.innerText = matchingEntry[5];
 
-                    var nameElement = document.createElement("p");
-                    nameElement.className = "classesName";
-                    nameElement.innerText = matchingEntry[5];
+                        var teacherElement = document.createElement("p");
+                        teacherElement.className = "teacherName";
+                        teacherElement.innerText = matchingEntry[7];
 
-                    var teacherElement = document.createElement("p");
-                    teacherElement.className = "teacherName";
-                    teacherElement.innerText = matchingEntry[7];
+                        var typeElement = document.createElement("p");
+                        typeElement.className = "classesType";
+                        typeElement.innerText = `${matchingEntry[6]}, Gr. ${matchingEntry[2]} `;
 
-                    var typeElement = document.createElement("p");
-                    typeElement.className = "classesType";
-                    typeElement.innerText = `${matchingEntry[6]}, Gr. ${matchingEntry[2]} `;
+                        divTopElement.appendChild(dateElement);
+                        divTopElement.appendChild(roomElement);
+                        divElement.appendChild(divTopElement);
 
+                        divElement.appendChild(hoursElement);
+                        divElement.appendChild(nameElement);
+                        divElement.appendChild(typeElement);
 
-
-                    divTopElement.appendChild(dateElement);
-                    divTopElement.appendChild(roomElement);
-                    divElement.appendChild(divTopElement);
-
-                    divElement.appendChild(hoursElement);
-                    divElement.appendChild(nameElement);
-                    //divElement.appendChild(teacherElement);
-                    divElement.appendChild(typeElement);
-
-                    cell.appendChild(divElement);
-                    // Usuwamy pasujący element, aby nie był brany pod uwagę w kolejnych iteracjach
-                    content = content.filter(entry => entry !== matchingEntry);
+                        cell.appendChild(divElement);
+                    }
                 } else {
                     cell.innerText = '';
                 }
             }
         }
     }
-
 }
 
 function getCheckboxesFromLocalStorage(){
