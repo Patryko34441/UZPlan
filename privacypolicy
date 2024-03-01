@@ -1,0 +1,28 @@
+
+Polityka prywatności wtyczki Chrome "UZP" - wersja 1.0
+
+Ostatnia aktualizacja: 01.03.2024r.
+
+Zakres i cel zbierania danych:
+Wtyczka "UZP" nie zbiera ani nie przechowuje żadnych danych osobowych użytkowników. Wszelkie informacje przetwarzane przez wtyczkę są przechowywane lokalnie na urządzeniu użytkownika i nie są przesyłane ani udostępniane żadnym zewnętrznym stronom.
+
+Dane przechowywane lokalnie:
+Wtyczka korzysta z uprawnień do przechowywania danych lokalnie na urządzeniu użytkownika. Przechowywane dane obejmują jedynie te, które są niezbędne do poprawnego funkcjonowania wtyczki, takie jak ustawienia personalizacyjne użytkownika.
+
+Uprawnienia:
+Wtyczka "UZP" korzysta z dwóch uprawnień: "storage" i "activeTab". Uprawnienie "storage" jest używane do przechowywania danych lokalnie, natomiast "activeTab" jest wykorzystywane do uzyskiwania dostępu do aktywnej karty przeglądarki, co umożliwia wtyczce poprawę widoczności planu zajęć na stronie http://www.plan.uz.zgora.pl/grupy_plan.php?ID=*.
+
+Bezpieczeństwo danych:
+Dbamy o bezpieczeństwo przechowywanych lokalnie danych poprzez zastosowanie odpowiednich środków ochrony. W żadnym przypadku wtyczka nie udostępnia danych użytkowników osobom trzecim.
+
+Aktualizacje:
+Aby zapewnić poprawne i bezpieczne funkcjonowanie wtyczki, zalecamy regularne aktualizacje do najnowszych wersji udostępnianych przez autora.
+
+Kontakt:
+W razie pytań dotyczących polityki prywatności lub wtyczki "UZP", prosimy o kontakt z autorem:
+
+Imię i nazwisko: Patryk Dudała
+Adres e-mail: patryko344@o2.pl
+Zastrzegamy sobie prawo do zmiany polityki prywatności w celu dostosowania jej do zmieniających się wymagań lub poprawy bezpieczeństwa wtyczki. Wszelkie zmiany będą publikowane na stronie wtyczki w sklepie Chrome Web Store.
+
+Dziękujemy za korzystanie z wtyczki "UZP"!
