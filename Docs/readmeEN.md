@@ -6,6 +6,9 @@ UZPlan is a plugin that greatly facilitates the reading of the timetable which i
 
 The plug-in is under development - ergo, as the creator, I do not take responsibility for the possible possibility of incorrect display of classes.
 
+If you found any bugs, feel free to contact me!
+e-mail : patryko344@o2.pl
+
 # Table of contents
 - [UZPlan](#uzplan)
 - [Table of contents](#table-of-contents)

@@ -7,6 +7,9 @@ UZPlan jest wtyczką, która w znacznym stopniu ułatwia odczytywanie planu zaj�
 
 Wtyczka jest w trakcie rozwoju - ergo jako twórca nie biorę odpowiedzialności za ewentualną możliwość błędnego wyświetlania się zajęć.
 
+Jeżeli znalazłeś błąd - skontaktuj się ze mną!
+e-mail : patryko344@o2.pl
+
 # Spis treści
 - [UZPlan](#uzplan)
 - [Spis treści](#spis-treści)
