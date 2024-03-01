@@ -4,9 +4,9 @@
 document.addEventListener('change', function(event) {
     if (event.target.type === 'checkbox') {
         checkboxes = getCheckedCheckboxes();
-        sortBytime(fiterByCheckboxes(zajecia,checkboxes));
-        console.log(sortBytime(fiterByCheckboxes(zajecia,checkboxes)) );
-        renderTimetable(sortBytime(fiterByCheckboxes(zajecia,checkboxes)) );
+        sortByTime(fiterByCheckboxes(zajecia,checkboxes));
+        console.log(sortByTime(fiterByCheckboxes(zajecia,checkboxes)) );
+        renderTimetable(sortByTime(fiterByCheckboxes(zajecia,checkboxes)) );
     }
 });
 

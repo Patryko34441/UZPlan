@@ -1,5 +1,6 @@
 {
   "name": "UZP",
+  "author": "Patryk Dudała",
   "version": "2.0.0",
   "description": "Rozszerzenie poprawiające widoczność planu zajęć UZ.",
   "permissions": [
