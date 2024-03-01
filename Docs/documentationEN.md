@@ -1,4 +1,4 @@
-[PL](../documentation.md) / [EN](Docs/documentationEN.md)
+[PL](documentation.md) / [EN](documentationEN.md)
 
 ## runExtension()
 
